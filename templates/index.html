@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <section class="chat-container" id="chat-box">
+            <div class="bot-message">
+                <p>Hello! Give the Ingredients , Get the recipes .</p>
+            </div>
+        </section>
+        <form id="user-input">
+            <input type="text" id="user-input-text" placeholder="Type your message here...">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('user-input');
+        const chatBox = document.getElementById('chat-box');
+
+        chatForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const userInput = document.getElementById('user-input-text').value.trim();
+            if (userInput === '') return;
+
+            const userMessage = document.createElement('div');
+            userMessage.className = 'user-message';
+            userMessage.innerHTML = `<p>${userInput}</p>`;
+            chatBox.appendChild(userMessage);
+
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            const responseData = await response.json();
+            const botResponse = document.createElement('div');
+            botResponse.className = 'bot-message';
+
+            botResponse.innerHTML = `<p>${responseData.message}</p>`;
+            chatBox.appendChild(botResponse);
+
+            document.getElementById('user-input-text').value = '';
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
+        });
+    </script>
+</body>
+</html>
