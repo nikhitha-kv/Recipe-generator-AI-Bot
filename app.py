@@ -12,6 +12,8 @@ app = Flask(__name__)
 df = pd.read_pickle('recipes_data.pkl')
 
 # Initialize OpenAI API key
+openai.api_key = 'sk-proj-ny4vZT1hB8KbXL4tuctVT3BlbkFJYdtzNd2n7XjU0y6BYhs9'  # Replace this with your new API key
+
 
 def generate_new_recipe(ingredients):
     prompt = f"Create a new and tasty recipe using the following ingredients: {', '.join(ingredients)}. Please provide a recipe name, ingredients list, and instructions."
